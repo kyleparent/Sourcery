@@ -11,9 +11,8 @@ import SourceryRuntime
 
 class Sourcery {
     public static let version: String = inUnitTests ? "Major.Minor.Patch" : Version.current.value
-    public static let generationMarker: String = "// Generated using Sourcery"
-    public static let generationHeader = "\(Sourcery.generationMarker) \(Sourcery.version) — https://github.com/krzysztofzablocki/Sourcery\n"
-        + "// DO NOT EDIT\n\n"
+    public static let generationMarker: String = "// Generated Code"
+    public static let generationHeader = "// THIS FILE CONTAINS GENERATED CODE!\nDO NOT EDIT\n\n"
 
     enum Error: Swift.Error {
         case containsMergeConflictMarkers
