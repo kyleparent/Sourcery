@@ -115,6 +115,7 @@ extension Method {
         string += "definedInTypeName = \(String(describing: self.definedInTypeName)), "
         string += "actualDefinedInTypeName = \(String(describing: self.actualDefinedInTypeName)), "
         string += "attributes = \(String(describing: self.attributes))"
+        string += "hasUniqueName = \(String(describing: self.hasUniqueName))"
         return string
     }
 }

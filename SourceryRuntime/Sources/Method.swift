@@ -86,7 +86,7 @@ public final class MethodParameter: NSObject, SourceryModel, Typed, Annotated {
 
 /// Describes method
 @objc(SwiftMethod) public final class Method: NSObject, SourceryModel, Annotated, Definition {
-
+    
     /// Full method name, including generic constraints, i.e. `foo<T>(bar: T)`
     public let name: String
 
@@ -216,6 +216,8 @@ public final class MethodParameter: NSObject, SourceryModel, Typed, Annotated {
     /// :nodoc:
     public var __parserData: Any?
 
+    public var hasUniqueName: Bool = true
+    
     /// :nodoc:
     public init(name: String,
                 selectorName: String? = nil,
@@ -264,6 +266,7 @@ public final class MethodParameter: NSObject, SourceryModel, Typed, Annotated {
             self.definedInTypeName = aDecoder.decode(forKey: "definedInTypeName")
             self.definedInType = aDecoder.decode(forKey: "definedInType")
             guard let attributes: [String: Attribute] = aDecoder.decode(forKey: "attributes") else { NSException.raise(NSExceptionName.parseErrorException, format: "Key '%@' not found.", arguments: getVaList(["attributes"])); fatalError() }; self.attributes = attributes
+            self.hasUniqueName = aDecoder.decode(forKey: "hasUniqueName")
         }
 
         /// :nodoc:
@@ -283,6 +286,7 @@ public final class MethodParameter: NSObject, SourceryModel, Typed, Annotated {
             aCoder.encode(self.definedInTypeName, forKey: "definedInTypeName")
             aCoder.encode(self.definedInType, forKey: "definedInType")
             aCoder.encode(self.attributes, forKey: "attributes")
+            aCoder.encode(self.hasUniqueName, forKey: "hasUniqueName")
         }
      // sourcery:end
 }

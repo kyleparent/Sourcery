@@ -290,6 +290,8 @@ public class Type: NSObject, SourceryModel, Annotated {
             guard let attributes: [String: Attribute] = aDecoder.decode(forKey: "attributes") else { NSException.raise(NSExceptionName.parseErrorException, format: "Key '%@' not found.", arguments: getVaList(["attributes"])); fatalError() }; self.attributes = attributes
             self.__parserData = aDecoder.decodeObject(forKey: "__parserData")
             self.__path = aDecoder.decode(forKey: "__path")
+            super.init()
+            setUniqueMethods()
         }
 
         /// :nodoc:
@@ -316,6 +318,27 @@ public class Type: NSObject, SourceryModel, Annotated {
             aCoder.encode(self.__parserData, forKey: "__parserData")
             aCoder.encode(self.__path, forKey: "__path")
         }
+    
+    public func setUniqueMethods() {
+        var mapping: [String: [Method]] = [:]
+        for method in methods {
+            var methods = mapping[method.shortName]
+            if methods == nil {
+                methods = [method]
+            } else {
+                methods?.append(method)
+            }
+            mapping[method.shortName] = methods
+        }
+        
+        for (_, value) in mapping {
+            if value.count > 1 {
+                for method: Method in value {
+                    method.hasUniqueName = false
+                }
+            }
+        }
+    }
     // sourcery:end
 }
 

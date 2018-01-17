@@ -172,6 +172,7 @@ extension EnumCase: EnumCaseAutoJSExport {}
     var actualDefinedInTypeName: TypeName? { get }
     var definedInType: Type? { get }
     var attributes: [String: Attribute] { get }
+    var hasUniqueName: Bool { get }
 }
 
 extension Method: MethodAutoJSExport {}

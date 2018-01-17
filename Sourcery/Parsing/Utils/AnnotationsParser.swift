@@ -140,6 +140,7 @@ internal struct AnnotationsParser {
                     let content = line.content.trimmingCharacters(in: .whitespaces)
                     var annotations = Annotations()
                     let isComment = content.hasPrefix("//") || content.hasPrefix("/*")
+                    let isImport = content.hasPrefix("import ")
                     var type: Line.LineType = isComment ? .comment : .other
                     if isComment {
                         switch searchForAnnotations(commentLine: content) {
@@ -181,8 +182,18 @@ internal struct AnnotationsParser {
                 }
     }
 
+    private static func searchForImport(importLine: String) -> String? {
+        if !commentLine.contains("import ") {
+            return nil
+        }
+
+        let lowerBound = commentLine.range(of: "import ")?.upperBound
+        let upperBound = commentLine.characters.indices.endIndex
+        return AnnotationsParser.parse(line: commentLine.substring(with: lowerBound ..< upperBound))
+    }
+    
     private static func searchForAnnotations(commentLine: String) -> AnnotationType {
-        guard commentLine.contains("sourcery:") else { return .annotations([:]) }
+        guard commentLine.contains("@") else { return .annotations([:]) }
 
         if commentLine.contains("sourcery:inline:") {
             return .inlineStart
@@ -204,7 +215,7 @@ internal struct AnnotationsParser {
             upperBound = commentLine.characters.indices.endIndex
             insideFileBlock = true
         } else {
-            lowerBound = commentLine.range(of: "sourcery:")?.upperBound
+            lowerBound = commentLine.range(of: "@")?.upperBound
             if commentLine.hasPrefix("//") {
                 upperBound = commentLine.characters.indices.endIndex
             } else {
